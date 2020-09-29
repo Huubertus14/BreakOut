@@ -11,6 +11,8 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
 
     private BricksAbstract[] singleBrickArray; //used to loop through all bricks at once, like create and destroy
     [SerializeField] private BricksAbstract[,] brickArray; //ref all bricks used in the game right now, used to check if a pos is empty
+    private List<BricksAbstract> activeBricks;
+    private Queue<BricksAbstract> unusedBricks;
 
     private bool bricksCreated = false;
 
@@ -19,7 +21,9 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         base.Awake();
         bricksCreated = false;
         singleBrickArray = new BricksAbstract[GameConstants.BRICK_AMOUNT];
+        unusedBricks = new Queue<BricksAbstract>();
         brickArray = new BricksAbstract[GameConstants.COLUMNCOUNT, GameConstants.ROWSCOUNT];
+        activeBricks = new List<BricksAbstract>();
     }
 
     private IEnumerator Start()
@@ -28,6 +32,10 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         yield return new WaitUntil(() => bricksCreated == true);
         CreateBox(20);
         //Debug.Log("empty: " + isEmpty(0,0)+ " " + isEmpty(500,500));
+        yield return new WaitForSeconds(3f);
+       /* MoveAllBricksOneDown();
+        yield return new WaitForSeconds(1.5f);*/
+        AddRowOnTop();
     }
 
     public IEnumerator CreateBeginBricks(int _amount)
@@ -55,6 +63,7 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
 
         for (int i = 0; i < singleBrickArray.Length; i++)
         {
+            unusedBricks.Enqueue(singleBrickArray[i]);
             singleBrickArray[i].gameObject.SetActive(false);
         }
         bricksCreated = true;
@@ -63,22 +72,19 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
 
     public void CreateBox(int _yLength)
     {
-        int counter = 0;
-        Color setCol = Color.red;
-
         for (int i = 0; i < GameConstants.COLUMNCOUNT; i++)
         {
-            setCol = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            Color setCol = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
 
             for (int j = 0; j < _yLength; j++)
             {
-                brickArray[i, j] = singleBrickArray[counter];
-
-                singleBrickArray[counter].gameObject.SetActive(true);
-                singleBrickArray[counter].SetPosition(i, j);
-                singleBrickArray[counter].SetPosToSide(Random.Range(-15f, 15f));
-                singleBrickArray[counter].SetColor(setCol);
-                counter++;
+                BricksAbstract _temp = unusedBricks.Dequeue();
+                brickArray[i, j] = _temp;
+                _temp.gameObject.SetActive(true);
+                _temp.SetPosition(i, j);
+                _temp.SetPosToSide(Random.Range(-15f, 15f));
+                _temp.SetColor(setCol);
+                activeBricks.Add(_temp);
             }
         }
     }
@@ -103,17 +109,17 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
 
     }
 
-    public BricksAbstract GetBrickAt(int x, int y)
+    public BricksAbstract GetBrickAt(Vector2 _index)
     {
         BricksAbstract tempBrick = null;
-        if (isEmpty(x, y))
+        if (isEmpty((int)_index.x, (int)_index.y))
         {
             //No brick found
             return tempBrick;
         }
         else
         {
-            tempBrick = brickArray[x, y];
+            tempBrick = brickArray[(int)_index.x, (int)_index.y];
         }
 
         return tempBrick;
@@ -125,11 +131,11 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         {
             for (int j = 0; j < GameConstants.ROWSCOUNT; j++)
             {
-                if (brickArray[i,j] != null )
+                if (brickArray[i, j] != null)
                 {
-                    if (brickArray[i,j].gameObject.activeSelf)
+                    if (brickArray[i, j].gameObject.activeSelf)
                     {
-                       return new Vector2(i,j);
+                        return new Vector2(i, j);
                     }
                 }
                 else
@@ -139,35 +145,75 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
             }
         }
         Debug.Log("Game Over?");
-        return new Vector2(0,0);
+        return new Vector2(0, 0);
     }
 
-    public void MoveBrick(BricksAbstract _movedBrick, int _newPosX, int _newPosY, bool _forceMove = false)
+    public void MoveAllBricksOneDown()
     {
-        if (isEmpty(_newPosX, _newPosY))
+        for (int i = 0; i < activeBricks.Count; i++)
         {
-            _movedBrick.SetGoalPosition(_newPosX, _newPosY);
+            if ((int)activeBricks[i].GetIndex.x + 1 < GameConstants.ROWSCOUNT) //check if row exists
+            {
+                Vector2 _movePlace = activeBricks[i].GetIndex;
+                _movePlace.y++;
+                MoveBrick(activeBricks[i], _movePlace, 3, true, true);
+            }
+        }
+    }
+
+    public void MoveBrick(BricksAbstract _movedBrick, Vector2 _newPos, int _tryCount, bool randomDelay = false, bool _forceMove = false)
+    {
+        if (isEmpty((int)_newPos.x, (int)_newPos.y))
+        {
+            brickArray[(int)_movedBrick.GetIndex.x, (int)_movedBrick.GetIndex.y] = null;
+            _movedBrick.SetGoalPosition((int)_newPos.x, (int)_newPos.y, randomDelay);
+            brickArray[(int)_newPos.x, (int)_newPos.y] = _movedBrick;
         }
         else
         {
             if (_forceMove)
             {
-                BricksAbstract _temp = GetBrickAt(_newPosX, _newPosY);
-                _movedBrick.SetGoalPosition(_newPosX, _newPosY);
-                Vector2 _newPlace = FindEmptyPlace();
-                _temp.SetGoalPosition((int)_newPlace.x, (int)_newPlace.y);
+                BricksAbstract _temp = GetBrickAt(_newPos);
+
+                brickArray[(int)_movedBrick.GetIndex.x, (int)_movedBrick.GetIndex.y] = null;
+                _movedBrick.SetGoalPosition((int)_newPos.x, (int)_newPos.y, randomDelay);
+                brickArray[(int)_newPos.x, (int)_newPos.y] = _movedBrick;
+
+                if (_tryCount <= 0)
+                {
+                    Vector2 _tempPos = FindEmptyPlace();
+                    MoveBrick(_temp, _tempPos, 1);
+                }
+                else
+                {
+                    _newPos.y++;
+                    MoveBrick(_temp, _newPos, _tryCount--);
+                }
             }
         }
     }
 
-    //Score /1000 is speed of block replacing
-    public void CreateNewBlocks()
+    /// <summary>
+    /// Ads a row on top of all (at y == 0) 
+    /// </summary>
+    public void AddRowOnTop()
     {
-        Vector2 newCoordiantes = new Vector2(Random.Range(0, GameConstants.COLUMNCOUNT), Random.Range(0, GameConstants.ROWSCOUNT));
+        if (unusedBricks.Count > GameConstants.COLUMNCOUNT)
+        {
+            MoveAllBricksOneDown();
+            for (int i = 0; i < GameConstants.COLUMNCOUNT; i++)
+            {
+                BricksAbstract _tempBrick = unusedBricks.Dequeue();
+                _tempBrick.gameObject.SetActive(true);
 
-        //Find an empty place
+                brickArray[i, 0] = _tempBrick;
+                _tempBrick.SetPosition(i, 0);
+                _tempBrick.SetPosToTop(Random.Range(2f, 5f));
+                Color setCol = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+                _tempBrick.SetColor(setCol);
+            }
+        }
+        //
+
     }
-
-
-
 }

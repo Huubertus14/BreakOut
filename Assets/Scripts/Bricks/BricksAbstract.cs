@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public abstract class BricksAbstract : MonoBehaviour
@@ -11,18 +12,15 @@ public abstract class BricksAbstract : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    int xPlace, yPlace;
+    [SerializeField]private Vector2 brickIndexes;
 
     [SerializeField]protected Vector3 goalPosition;
+
+    private float delayTimer;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    private void Start()
-    {
-        //goalPosition = transform.localPosition;
     }
 
     public virtual void HitBrick()
@@ -36,7 +34,14 @@ public abstract class BricksAbstract : MonoBehaviour
 
     private void Update()
     {
-        transform.localPosition = Vector3.MoveTowards(transform.localPosition, goalPosition, Time.deltaTime * moveSpeed);
+        if (delayTimer > 0)
+        {
+            delayTimer -= Time.deltaTime;
+        }
+        else
+        {
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, goalPosition, Time.deltaTime * moveSpeed);
+        }
     }
 
     public virtual void SetColor(Color _col)
@@ -49,11 +54,24 @@ public abstract class BricksAbstract : MonoBehaviour
         transform.localPosition = new Vector3(transform.localPosition.x + _side, transform.localPosition.y, transform.localPosition.z);
     }
 
-    public virtual void SetGoalPosition(int _x, int _y)
+    public void SetPosToTop(float _top)
     {
-        
-        //_x = Mathf.Clamp(_x, 0, GameConstants.ROWSCOUNT);
-        //_y = Mathf.Clamp(_x, 0, GameConstants.COLUMNCOUNT);
+        transform.localPosition = new Vector3(transform.localPosition.x , transform.localPosition.y +_top, transform.localPosition.z);
+    }
+
+    public virtual void SetGoalPosition(int _x, int _y, bool randomDelay = false)
+    {
+        if (randomDelay)
+        {
+            delayTimer = Random.Range(0.5f,1.2f);
+        }
+        else
+        {
+            delayTimer = -1;
+        }
+
+        brickIndexes.x = _x;
+        brickIndexes.y = _y;
         //Set goal pos
         float xCalculated = -2f, yCalculated = 4f;
 
@@ -61,13 +79,12 @@ public abstract class BricksAbstract : MonoBehaviour
         yCalculated = yCalculated - (_y * GameConstants.YSTEP);
 
         goalPosition = new Vector3(xCalculated, yCalculated, transform.localPosition.z);
-        Debug.Log("SetGoal " + _x + " / " + _y);
     }
 
     public virtual void SetPosition(int _x, int _y)
     {
-        xPlace = _x;
-        yPlace = _y;
+        brickIndexes.x = _x; 
+        brickIndexes.y = _y;
         float xCalculated = -2f, yCalculated = 4f;
 
         xCalculated = xCalculated + (_x * GameConstants.XSTEP);
@@ -83,4 +100,6 @@ public abstract class BricksAbstract : MonoBehaviour
     }
 
     public int GetScore => brickScore;
+
+    public Vector2 GetIndex => brickIndexes;
 }
