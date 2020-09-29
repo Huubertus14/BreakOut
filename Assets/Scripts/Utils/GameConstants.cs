@@ -14,5 +14,9 @@ public class GameConstants
 
     public const int COLUMNCOUNT = 11;
 
+    public static Color[] GetColors
+    {
+        get { return new Color[] { Color.red, Color.green, Color.blue, Color.cyan, Color.magenta, Color.yellow }; }
+    }
 
 }

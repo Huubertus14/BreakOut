@@ -96,7 +96,7 @@ public abstract class BricksAbstract : MonoBehaviour
 
     protected void DestroyBrick()
     {
-        gameObject.SetActive(false);
+        BricksManager.SP.RemoveBrick(this);
     }
 
     public int GetScore => brickScore;

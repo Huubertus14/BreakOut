@@ -32,10 +32,10 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         yield return new WaitUntil(() => bricksCreated == true);
         CreateBox(20);
         //Debug.Log("empty: " + isEmpty(0,0)+ " " + isEmpty(500,500));
-        yield return new WaitForSeconds(3f);
+        //yield return new WaitForSeconds(3f);
        /* MoveAllBricksOneDown();
         yield return new WaitForSeconds(1.5f);*/
-        AddRowOnTop();
+        //AddRowOnTop();
     }
 
     public IEnumerator CreateBeginBricks(int _amount)
@@ -70,6 +70,14 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         yield return 0;
     }
 
+    public void RemoveBrick(BricksAbstract _brick)
+    {
+        unusedBricks.Enqueue(_brick);
+        brickArray[(int)_brick.GetIndex.x, (int)_brick.GetIndex.y] = null;
+        activeBricks.Remove(_brick);
+        _brick.gameObject.SetActive(false);
+    }
+
     public void CreateBox(int _yLength)
     {
         for (int i = 0; i < GameConstants.COLUMNCOUNT; i++)
@@ -89,13 +97,13 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         }
     }
 
-    public bool isEmpty(int _x, int _y)
+    public bool isEmpty(Vector2 _index)
     {
         //Check if x & Y are in range
         try
         {
             bool empty = true;
-            if (brickArray[_x, _y] == null || !brickArray[_x, _y].gameObject.activeSelf)
+            if (brickArray[(int)_index.x, (int)_index.y] == null || !brickArray[(int)_index.x, (int)_index.y].gameObject.activeSelf)
             {
                 empty = false;
             }
@@ -112,9 +120,10 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
     public BricksAbstract GetBrickAt(Vector2 _index)
     {
         BricksAbstract tempBrick = null;
-        if (isEmpty((int)_index.x, (int)_index.y))
+        if (isEmpty(_index))
         {
             //No brick found
+            Debug.Log("This place is empty");
             return tempBrick;
         }
         else
@@ -156,18 +165,19 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
             {
                 Vector2 _movePlace = activeBricks[i].GetIndex;
                 _movePlace.y++;
-                MoveBrick(activeBricks[i], _movePlace, 3, true, true);
+                MoveBrick(activeBricks[i], _movePlace, 3, false, true);
             }
         }
     }
 
     public void MoveBrick(BricksAbstract _movedBrick, Vector2 _newPos, int _tryCount, bool randomDelay = false, bool _forceMove = false)
     {
-        if (isEmpty((int)_newPos.x, (int)_newPos.y))
+        if (isEmpty(_newPos))
         {
-            brickArray[(int)_movedBrick.GetIndex.x, (int)_movedBrick.GetIndex.y] = null;
+            Vector2 _prefPos = _movedBrick.GetIndex;
             _movedBrick.SetGoalPosition((int)_newPos.x, (int)_newPos.y, randomDelay);
             brickArray[(int)_newPos.x, (int)_newPos.y] = _movedBrick;
+            brickArray[(int)_prefPos.x, (int)_prefPos.y] = null;
         }
         else
         {
@@ -175,19 +185,23 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
             {
                 BricksAbstract _temp = GetBrickAt(_newPos);
 
-                brickArray[(int)_movedBrick.GetIndex.x, (int)_movedBrick.GetIndex.y] = null;
+                Vector2 _prefPos = _movedBrick.GetIndex;
                 _movedBrick.SetGoalPosition((int)_newPos.x, (int)_newPos.y, randomDelay);
                 brickArray[(int)_newPos.x, (int)_newPos.y] = _movedBrick;
+                brickArray[(int)_prefPos.x, (int)_prefPos.y] = null;
 
-                if (_tryCount <= 0)
+                if (_temp != null)
                 {
-                    Vector2 _tempPos = FindEmptyPlace();
-                    MoveBrick(_temp, _tempPos, 1);
-                }
-                else
-                {
-                    _newPos.y++;
-                    MoveBrick(_temp, _newPos, _tryCount--);
+                    if (_tryCount <= 0)
+                    {
+                        Vector2 _tempPos = FindEmptyPlace();
+                        MoveBrick(_temp, _tempPos, 1);
+                    }
+                    else
+                    {
+                        _newPos.y++;
+                        MoveBrick(_temp, _newPos, _tryCount--);
+                    }
                 }
             }
         }
@@ -211,9 +225,8 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
                 _tempBrick.SetPosToTop(Random.Range(2f, 5f));
                 Color setCol = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
                 _tempBrick.SetColor(setCol);
+                activeBricks.Add(_tempBrick);
             }
         }
-        //
-
     }
 }

@@ -40,7 +40,7 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
         matchScore = 0;
         timePlayed = 0;
         gameStarted = false;
-        amountOfLives = 0;
+        amountOfLives = 2;
         GameUIController.SP.SetGameOverPanel(false);
         GameUIController.SP.SetPlayButton(true);
     }
@@ -54,7 +54,7 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
     {
         //Player Died
         amountOfLives--;
-
+        gameStarted = false;
         if (amountOfLives >= 0)
         {
             BallManager.SP.CreateFirstBall();
@@ -107,4 +107,6 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
     public int GetScore => matchScore;
 
     public PlayerBehaviour GetPB => pb;
+
+    public bool GameStarted => gameStarted;
 }
