@@ -7,12 +7,13 @@ public abstract class BricksAbstract : MonoBehaviour
     [Header("BrickValues")]
     [SerializeField] protected int health;
     [SerializeField] protected float moveSpeed = 5f;
-
+    [SerializeField] protected int brickScore  = 100;
 
     private SpriteRenderer spriteRenderer;
 
+    int xPlace, yPlace;
 
-    protected Vector3 goalPosition;
+    [SerializeField]protected Vector3 goalPosition;
 
     private void Awake()
     {
@@ -21,7 +22,7 @@ public abstract class BricksAbstract : MonoBehaviour
 
     private void Start()
     {
-        goalPosition = transform.localPosition;
+        //goalPosition = transform.localPosition;
     }
 
     public virtual void HitBrick()
@@ -43,6 +44,10 @@ public abstract class BricksAbstract : MonoBehaviour
         spriteRenderer.color = _col;
     }
 
+    public void SetPosToSide(float _side)
+    {
+        transform.localPosition = new Vector3(transform.localPosition.x + _side, transform.localPosition.y, transform.localPosition.z);
+    }
 
     public virtual void SetGoalPosition(int _x, int _y)
     {
@@ -61,6 +66,8 @@ public abstract class BricksAbstract : MonoBehaviour
 
     public virtual void SetPosition(int _x, int _y)
     {
+        xPlace = _x;
+        yPlace = _y;
         float xCalculated = -2f, yCalculated = 4f;
 
         xCalculated = xCalculated + (_x * GameConstants.XSTEP);
@@ -74,4 +81,6 @@ public abstract class BricksAbstract : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public int GetScore => brickScore;
 }

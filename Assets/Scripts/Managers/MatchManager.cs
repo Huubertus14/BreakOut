@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Different from game manager
@@ -10,28 +10,101 @@ using UnityEngine;
 public class MatchManager : SingetonMonobehaviour<MatchManager>
 {
     [Header("Refs:")]
-    [SerializeField] private GameObject ballPrefab;
-    [SerializeField] private GameObject ballParent;
     [SerializeField] private PlayerBehaviour pb;
 
-    private List<BallBehaviour> allBalls;
+
+    [Header("Match Values")]
+    [SerializeField] private float timePlayed;
+    [SerializeField] private int matchScore;
+    [SerializeField] private int amountOfLives;
+
+    private bool gameStarted = false;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+    }
 
     private void Start()
     {
-        allBalls = new List<BallBehaviour>();
-        //Create base ball
-        GameObject _firstball = Instantiate(ballPrefab, pb.transform.position, Quaternion.identity, pb.transform);
-        _firstball.transform.localPosition = new Vector3(_firstball.transform.localPosition.x, _firstball.transform.localPosition.y + 0.3f, _firstball.transform.localPosition.z);
-
-        allBalls.Add(_firstball.GetComponent<BallBehaviour>());
+        ResetMatchValues();
     }
 
+    private void Update()
+    {
+        timePlayed += Time.deltaTime;
+    }
+
+    public void ResetMatchValues() {
+        matchScore = 0;
+        timePlayed = 0;
+        gameStarted = false;
+        amountOfLives = 0;
+        GameUIController.SP.SetGameOverPanel(false);
+        GameUIController.SP.SetPlayButton(true);
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public IEnumerator PlayerDied()
+    {
+        //Player Died
+        amountOfLives--;
+
+        if (amountOfLives >= 0)
+        {
+            BallManager.SP.CreateFirstBall();
+
+            yield return new WaitForSeconds(0.8f);
+            //Enable shoot button
+            BallManager.SP.FireFirstBall();
+        }
+        else
+        {
+            //Game Over Screen
+            GameUIController.SP.SetGameOverPanel(true);
+        }
+        yield return 0;
+    }
+
+    /// <summary>
+    /// Called from the inspector
+    /// </summary>
     public void PlayGame()
     {
-        allBalls[0].ShootBall(150f);
-        allBalls[0].transform.SetParent(ballParent.transform);
+        //TODO delay here, first create the grid of some sort
+        BallManager.SP.FireFirstBall();
+        gameStarted = true;
     }
 
+    public void AddScore(int _score)
+    {
+        matchScore += _score;
+        GameUIController.SP.SetScoreText(matchScore);
+    }
 
-    public GameObject GetBallPrefab => ballPrefab;
+    public void GoToMainMenu()
+    {
+        GameManager.SP.GoToMainMenu();
+
+        //Add score to player
+        //Check if new highScore
+        GameManager.SP.GetPlayerData.playerTotalScore += matchScore;
+
+        if (matchScore > GameManager.SP.GetPlayerData.playerHighScore)
+        {
+            //New HighScore
+            GameManager.SP.GetPlayerData.playerHighScore = matchScore;
+            //Do something awesome !
+        }
+        GameManager.SP.SaveGame();
+    }
+
+    public int GetScore => matchScore;
+
+    public PlayerBehaviour GetPB => pb;
 }

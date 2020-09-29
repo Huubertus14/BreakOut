@@ -5,10 +5,14 @@ using UnityEngine;
 public class BallBehaviour : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private ScaleTween hitWiggle;
+
+    private float maxVelocity = 5; //5 is a lot
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        hitWiggle = GetComponent<ScaleTween>();
         rb.Sleep();
         rb.isKinematic = true;
         
@@ -27,12 +31,27 @@ public class BallBehaviour : MonoBehaviour
         rb.AddForce(_dir);
     }
 
+    private void Update()
+    {
+        SetVelocity();
+    }
+
+    private void SetVelocity()
+    {
+        if (rb.velocity.sqrMagnitude > maxVelocity)
+        {
+            rb.velocity = rb.velocity.normalized * maxVelocity;
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         BricksAbstract ab = collision.gameObject.GetComponent<BricksAbstract>();
         if (ab != null)
         {
             ab.HitBrick();
+            MatchManager.SP.AddScore(ab.GetScore);
+            hitWiggle.StartTween(0.2f);
             return;
         }
 
@@ -42,4 +61,15 @@ public class BallBehaviour : MonoBehaviour
             BounceOff(collision.contacts[0].point);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        DeathZoneBehaviour dz = collision.gameObject.GetComponent<DeathZoneBehaviour>();
+        if (dz != null)
+        {
+            //ball enterd the dead zone
+            BallManager.SP.BallDeath(this);
+        }
+    }
+
 }

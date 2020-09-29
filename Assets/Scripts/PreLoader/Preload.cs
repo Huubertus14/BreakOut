@@ -9,9 +9,25 @@ public class Preload : MonoBehaviour
     [SerializeField] private GameObject persistancePrefab;
     private void Awake()
     {
-        Instantiate(persistancePrefab);
-        DontDestroyOnLoad(persistancePrefab);
+        GameObject tempPers = Instantiate(persistancePrefab);
+        DontDestroyOnLoad(tempPers);
 
+        StartCoroutine(StartLoadingGame());
+    }
+
+
+    private IEnumerator StartLoadingGame()
+    {
+        float timeOut = 25;
+
+        while (GameManager.SP.GetPlayerData == null)
+        {
+            GameManager.SP.SetPlayerData(SaveData.LoadData());
+            Debug.Log("Load Data");
+            yield return 0;
+        }
+
+        yield return 0;
         SceneManager.LoadScene(1);
         SceneManager.sceneLoaded += OnBootMainMenuLoaded;
     }
