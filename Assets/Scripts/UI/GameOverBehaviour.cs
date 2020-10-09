@@ -9,8 +9,8 @@ public class GameOverBehaviour : MonoBehaviour
     [SerializeField] private TextCounter scoreText;
     [SerializeField] private TextCounter neededText;
 
-    TweenIn tweenIn;
-    TweenOut tweenOut;
+    TweenAbstract tweenIn;
+    TweenAbstract tweenOut;
     private void Awake()
     {
         tweenIn = GetComponentInChildren<TweenIn>();

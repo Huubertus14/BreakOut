@@ -28,7 +28,7 @@ public class BallManager : SingetonMonobehaviour<BallManager>
         GameObject _firstball = Instantiate(ballPrefab, MatchManager.SP.GetPB.transform.position, Quaternion.identity, MatchManager.SP.GetPB.transform);
         _firstball.transform.localPosition = new Vector3(_firstball.transform.localPosition.x, _firstball.transform.localPosition.y + 0.3f, _firstball.transform.localPosition.z);
 
-        _firstball.GetComponent<ScaleTween>().StartTween(0.1f);
+        _firstball.GetComponent<TweenAbstract>().StartTween(0.1f);
         allBalls.Add(_firstball.GetComponent<BallBehaviour>());
     }
 

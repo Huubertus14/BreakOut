@@ -1,16 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Runtime.InteropServices;
 using UnityEngine;
+
+public enum BrickColor
+{
+    Blue,
+    Green,
+    Orange,
+    Pink,
+    Purple,
+    Red,
+    None
+}
 
 public class BricksManager : SingetonMonobehaviour<BricksManager>
 {
     [Header("Refs:")]
     [SerializeField]
     private BricksAbstract brickPrefab;
+    [SerializeField] private Sprite[] brickSprites; //Are set in the inspector
+
+
+    private Dictionary<BrickColor, Sprite> brickDictionairy;
 
     private BricksAbstract[] singleBrickArray; //used to loop through all bricks at once, like create and destroy
-    [SerializeField] private BricksAbstract[,] brickArray; //ref all bricks used in the game right now, used to check if a pos is empty
+    private BricksAbstract[,] brickArray; //ref all bricks used in the game right now, used to check if a pos is empty
     private List<BricksAbstract> activeBricks;
     private Queue<BricksAbstract> unusedBricks;
 
@@ -24,6 +40,15 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         unusedBricks = new Queue<BricksAbstract>();
         brickArray = new BricksAbstract[GameConstants.COLUMNCOUNT, GameConstants.ROWSCOUNT];
         activeBricks = new List<BricksAbstract>();
+
+        brickDictionairy = new Dictionary<BrickColor, Sprite>();
+        brickDictionairy.Add(BrickColor.Blue, brickSprites[0]);
+        brickDictionairy.Add(BrickColor.Green, brickSprites[1]);
+        brickDictionairy.Add(BrickColor.Orange, brickSprites[2]);
+        brickDictionairy.Add(BrickColor.Pink, brickSprites[3]);
+        brickDictionairy.Add(BrickColor.Purple, brickSprites[4]);
+        brickDictionairy.Add(BrickColor.Red, brickSprites[5]);
+
     }
 
     private IEnumerator Start()
@@ -33,8 +58,8 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         CreateBox(20);
         //Debug.Log("empty: " + isEmpty(0,0)+ " " + isEmpty(500,500));
         //yield return new WaitForSeconds(3f);
-       /* MoveAllBricksOneDown();
-        yield return new WaitForSeconds(1.5f);*/
+        /* MoveAllBricksOneDown();
+         yield return new WaitForSeconds(1.5f);*/
         //AddRowOnTop();
     }
 
@@ -82,8 +107,6 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
     {
         for (int i = 0; i < GameConstants.COLUMNCOUNT; i++)
         {
-            Color setCol = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-
             for (int j = 0; j < _yLength; j++)
             {
                 BricksAbstract _temp = unusedBricks.Dequeue();
@@ -91,7 +114,8 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
                 _temp.gameObject.SetActive(true);
                 _temp.SetPosition(i, j);
                 _temp.SetPosToSide(Random.Range(-15f, 15f));
-                _temp.SetColor(setCol);
+                Sprite _tempSpr = GetRandomBrickSprite();
+                _temp.SetSprite(_tempSpr, GetColorFromSprite(_tempSpr));
                 activeBricks.Add(_temp);
             }
         }
@@ -223,10 +247,49 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
                 brickArray[i, 0] = _tempBrick;
                 _tempBrick.SetPosition(i, 0);
                 _tempBrick.SetPosToTop(Random.Range(2f, 5f));
-                Color setCol = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-                _tempBrick.SetColor(setCol);
+
+                Sprite _temp = GetRandomBrickSprite();
+                _tempBrick.SetSprite(_temp, GetColorFromSprite(_temp));
                 activeBricks.Add(_tempBrick);
             }
         }
     }
+
+    public Sprite GetRandomBrickSprite()
+    {
+        int _index = Random.Range(0, brickSprites.Length);
+        return brickSprites[_index];
+    }
+
+    public BrickColor GetColorFromSprite(Sprite _sprite)
+    {
+        foreach (var item in brickDictionairy)
+        {
+            if (item.Value == _sprite)
+            {
+                return item.Key;
+            }
+        }
+        Debug.LogWarning("Could not find a Sprite");
+        return BrickColor.None;
+    }
+
+    public Sprite GetSpecificBrickSprite(BrickColor _color)
+    {
+        if (_color == BrickColor.None) //If none color than dont try to find anything
+        {
+            Debug.LogWarning("Tried to get Color NONE");
+            return brickSprites[0];
+        }
+        if (brickDictionairy.TryGetValue(_color, out Sprite value))
+        {
+            return value;
+        }
+        else
+        {
+            Debug.LogWarning("Tried to get Color: " + _color.ToString());
+            return brickSprites[0];
+        }
+    }
+
 }

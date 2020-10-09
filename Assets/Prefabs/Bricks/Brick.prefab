@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8490646480286465854}
   - component: {fileID: 8490646480286465855}
   - component: {fileID: 8490646480286465824}
-  - component: {fileID: 8490646480286465825}
+  - component: {fileID: 6670553530234738772}
   m_Layer: 0
   m_Name: Brick
   m_TagString: Untagged
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 8490646480286465853}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.253, y: 1.85, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.1, z: 1}
+  m_LocalScale: {x: 0.15, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6be5c5822164c3a41845acf7401bc65f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f5ac41725f3de384eac4944f2f414994, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -94,7 +94,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9611530ac7f8684085e4ef8f4deab1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!60 &8490646480286465825
+  health: 0
+  moveSpeed: 5
+  brickScore: 100
+  brickIndexes: {x: 0, y: 0}
+  goalPosition: {x: 0, y: 0, z: 0}
+--- !u!60 &6670553530234738772
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,7 +116,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.56, y: 2.56}
+    oldSize: {x: 3.4, y: 2.8}
     newSize: {x: 4, y: 2.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -119,11 +124,34 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.88315904, y: 0.98279357}
-      - {x: -0.97558737, y: 0.888381}
-      - {x: -0.9683806, y: -0.88676333}
-      - {x: -0.9136033, y: -0.94676256}
-      - {x: 0.90076625, y: -0.96731424}
-      - {x: 0.9775889, y: -0.8972633}
-      - {x: 0.97198427, y: 0.8895564}
-      - {x: 0.8971274, y: 0.96838}
+    - - {x: 1.51, y: -0.96999997}
+      - {x: 1.5699999, y: -0.88}
+      - {x: 1.68, y: -0.62}
+      - {x: 1.6999999, y: -0.52}
+      - {x: 1.6999999, y: 0.48999998}
+      - {x: 1.6899999, y: 0.53}
+      - {x: 1.67, y: 0.65}
+      - {x: 1.5699999, y: 0.88}
+      - {x: 1.4599999, y: 1.02}
+      - {x: 1.27, y: 1.2099999}
+      - {x: 1.18, y: 1.27}
+      - {x: 0.97999996, y: 1.36}
+      - {x: 0.78999996, y: 1.4}
+      - {x: -0.85999995, y: 1.4}
+      - {x: -1.1899999, y: 1.27}
+      - {x: -1.27, y: 1.1999999}
+      - {x: -1.51, y: 0.96999997}
+      - {x: -1.64, y: 0.74}
+      - {x: -1.68, y: 0.61}
+      - {x: -1.6999999, y: 0.47}
+      - {x: -1.6999999, y: -0.47}
+      - {x: -1.67, y: -0.62}
+      - {x: -1.64, y: -0.74}
+      - {x: -1.51, y: -0.96999997}
+      - {x: -1.27, y: -1.2099999}
+      - {x: -1.18, y: -1.27}
+      - {x: -0.91999996, y: -1.38}
+      - {x: -0.78, y: -1.4}
+      - {x: 0.82, y: -1.4}
+      - {x: 1.04, y: -1.3399999}
+      - {x: 1.27, y: -1.2099999}

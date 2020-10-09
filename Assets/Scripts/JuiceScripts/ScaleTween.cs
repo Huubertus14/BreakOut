@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
-public class ScaleTween : MonoBehaviour
+public class ScaleTween : TweenAbstract
 {
     [Header("AnimationValues")]
     [SerializeField] private AnimationCurve curve;
@@ -11,24 +10,24 @@ public class ScaleTween : MonoBehaviour
     private float timeTweenKey = 2;
     private float tweenValue = 2;
 
-    private float duration;
+    private float scale;
 
     private Vector3 orginScale;
 
     private void Awake()
     {
         orginScale = transform.localScale;
+        scale = 1;
     }
 
-    public void StartTween(float _duration)
+    public override void StartTween(float _duration)
     {
-        StopAllCoroutines();
-        duration = _duration;
+        base.StartTween(_duration);
         timeTweenKey = 0;
         StartCoroutine(DoTween());
     }
 
-    private IEnumerator DoTween()
+    protected override IEnumerator DoTween()
     {
         while (timeTweenKey < 1)
         {
@@ -44,7 +43,8 @@ public class ScaleTween : MonoBehaviour
 
     private void SetLocalScale(float _scale)
     {
-        transform.localScale = new Vector3(transform.localScale.x * _scale, transform.localScale.y * _scale, transform.localScale.z * _scale);
+        scale = _scale;
+        transform.localScale = new Vector3(transform.localScale.x * scale, transform.localScale.y * scale, transform.localScale.z * scale);
     }
 
 }

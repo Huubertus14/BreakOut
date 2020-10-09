@@ -6,13 +6,16 @@ public class GameConstants
 {
     public const int BRICK_AMOUNT = 462;
 
-    public const float XSTEP = 0.4f;
+    public const float XSTEP = 0.5f;
 
-    public const float YSTEP = 0.2f;
+    public const float YSTEP = 0.3f;
+
+    public const float XBEGIN = -2f;
+    public const float YBEGIN = 3.8f;
 
     public const int ROWSCOUNT = 42;
 
-    public const int COLUMNCOUNT = 11;
+    public const int COLUMNCOUNT = 9;
 
     public static Color[] GetColors
     {

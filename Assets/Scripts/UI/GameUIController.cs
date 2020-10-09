@@ -11,8 +11,8 @@ public class GameUIController : SingetonMonobehaviour<GameUIController>
     [SerializeField] private GameOverBehaviour gameOverPanel;
 
     [Header("PlayButton Refs")]
-    [SerializeField] private TweenIn playButIn;
-    [SerializeField] private TweenOut playButOut;
+    [SerializeField] private TweenAbstract playButIn;
+    [SerializeField] private TweenAbstract playButOut;
 
     protected override void Awake()
     {

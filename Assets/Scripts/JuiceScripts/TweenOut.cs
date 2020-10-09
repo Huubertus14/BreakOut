@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TweenOut : MonoBehaviour
+public class TweenOut : TweenAbstract
 {
     [Header("AnimationValues")]
     [SerializeField] private AnimationCurve curve;
 
     public float timeTweenKey = 2;
     public float tweenValue = 2;
-
-    public float duration;
 
     public Vector3 orginScale;
 
@@ -22,16 +20,15 @@ public class TweenOut : MonoBehaviour
         orginScale = rectTransform.localScale;
     }
 
-    public void StartTween(float _duration)
+    public override void StartTween(float _duration)
     {
-        StopAllCoroutines();
-        duration = _duration;
+        base.StartTween(_duration);
         tweenValue = 0;
         timeTweenKey = 0;
         StartCoroutine(DoTween());
     }
 
-    private IEnumerator DoTween()
+    protected override IEnumerator DoTween()
     {
         while (timeTweenKey < 1)
         {

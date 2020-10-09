@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class Preload : MonoBehaviour
 {
     [SerializeField] private GameObject persistancePrefab;
+
     private void Awake()
     {
         GameObject tempPers = Instantiate(persistancePrefab);

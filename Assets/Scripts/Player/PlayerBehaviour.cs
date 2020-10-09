@@ -7,11 +7,11 @@ public class PlayerBehaviour : MonoBehaviour
     [Header("Player Values")]
     [SerializeField] private float wideSize = 1.5f;
 
-    private ScaleTween hitWiggle;
+    private TweenAbstract hitWiggle;
     private void Start()
     {
         //Create ball prefab
-        hitWiggle = GetComponent<ScaleTween>();
+        hitWiggle = GetComponent<TweenAbstract>();
     }
 
 

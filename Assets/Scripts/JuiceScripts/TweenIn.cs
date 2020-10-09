@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TweenIn : MonoBehaviour
+public class TweenIn : TweenAbstract
 {
     [Header("AnimationValues")]
     [SerializeField] private AnimationCurve curve;
@@ -10,7 +10,6 @@ public class TweenIn : MonoBehaviour
     public float timeTweenKey = 2;
     public float tweenValue = 2;
 
-    public float duration;
 
     public Vector3 orginScale;
 
@@ -23,16 +22,15 @@ public class TweenIn : MonoBehaviour
         SetLocalScale(0);
     }
 
-    public void StartTween(float _duration)
+    public override void StartTween(float _duration)
     {
-        StopAllCoroutines();
-        duration = _duration;
+        base.StartTween(_duration);
         tweenValue = 0;
         timeTweenKey = 0;
         StartCoroutine(DoTween());
     }
 
-    private IEnumerator DoTween()
+    protected override IEnumerator DoTween()
     {
         while (timeTweenKey < 1)
         {

@@ -5,14 +5,14 @@ using UnityEngine;
 public class BallBehaviour : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private ScaleTween hitWiggle;
+    private TweenAbstract hitWiggle;
 
     private float maxVelocity = 5; //5 is a lot
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        hitWiggle = GetComponent<ScaleTween>();
+        hitWiggle = GetComponent<TweenAbstract>();
         rb.Sleep();
         rb.isKinematic = true;
         

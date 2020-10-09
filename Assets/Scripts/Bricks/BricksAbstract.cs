@@ -9,6 +9,7 @@ public abstract class BricksAbstract : MonoBehaviour
     [SerializeField] protected int health;
     [SerializeField] protected float moveSpeed = 5f;
     [SerializeField] protected int brickScore  = 100;
+    [SerializeField] protected BrickColor brickColor;
 
     private SpriteRenderer spriteRenderer;
 
@@ -21,6 +22,8 @@ public abstract class BricksAbstract : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        transform.localScale = new Vector3(0.15f, 0.1f, 1);
     }
 
     public virtual void HitBrick()
@@ -44,9 +47,14 @@ public abstract class BricksAbstract : MonoBehaviour
         }
     }
 
-    public virtual void SetColor(Color _col)
+    public virtual void SetSprite(Sprite _sprite, BrickColor _color)
     {
-        spriteRenderer.color = _col;
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+        brickColor = _color;
+        spriteRenderer.sprite = _sprite;
     }
 
     public void SetPosToSide(float _side)
@@ -73,7 +81,7 @@ public abstract class BricksAbstract : MonoBehaviour
         brickIndexes.x = _x;
         brickIndexes.y = _y;
         //Set goal pos
-        float xCalculated = -2f, yCalculated = 4f;
+        float xCalculated = GameConstants.XBEGIN, yCalculated = GameConstants.YBEGIN;
 
         xCalculated = xCalculated + (_x * GameConstants.XSTEP);
         yCalculated = yCalculated - (_y * GameConstants.YSTEP);
@@ -85,7 +93,7 @@ public abstract class BricksAbstract : MonoBehaviour
     {
         brickIndexes.x = _x; 
         brickIndexes.y = _y;
-        float xCalculated = -2f, yCalculated = 4f;
+        float xCalculated = GameConstants.XBEGIN, yCalculated = GameConstants.YBEGIN;
 
         xCalculated = xCalculated + (_x * GameConstants.XSTEP);
         yCalculated = yCalculated - (_y * GameConstants.YSTEP);
