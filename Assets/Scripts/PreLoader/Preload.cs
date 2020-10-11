@@ -21,12 +21,13 @@ public class Preload : MonoBehaviour
     {
         float timeOut = 25;
 
-        while (GameManager.SP.GetPlayerData == null)
+        //TODO Remove this when all i working again
+        /*while (GameManager.SP.GetPlayerData == null)
         {
             GameManager.SP.SetPlayerData(SaveData.LoadData());
             Debug.Log("Load Data");
             yield return 0;
-        }
+        }*/
 
         yield return 0;
         SceneManager.LoadScene(1);

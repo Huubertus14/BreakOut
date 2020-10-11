@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
-using GooglePlayGames.BasicApi.SavedGame;
+//using GooglePlayGames;
+//using GooglePlayGames.BasicApi;
+//using GooglePlayGames.BasicApi.SavedGame;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
@@ -17,7 +17,7 @@ public class SaveData
 
     private static PlayerData loadedData;
 
-    public static PlayerData LoadData()
+    /*public static PlayerData LoadData()
     {
         Debug.Log("path: "+Application.persistentDataPath);
         saving = false;
@@ -191,7 +191,7 @@ public class SaveData
         {
             // handle error
         }
-    }
+    }*/
 }
 
 [System.Serializable]
