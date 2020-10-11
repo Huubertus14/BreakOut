@@ -16,10 +16,23 @@ public class Preload : MonoBehaviour
         StartCoroutine(StartLoadingGame());
     }
 
+    private void SetAndroidSettings() {
+
+        //Ask for permisions
+        Screen.autorotateToPortraitUpsideDown = true;
+        Screen.autorotateToPortrait = true;
+        Screen.autorotateToLandscapeLeft = false;
+        Screen.autorotateToLandscapeRight = false;
+
+        //Set right resolution
+        Screen.SetResolution(1080,1920, true);
+    }
 
     private IEnumerator StartLoadingGame()
     {
         float timeOut = 25;
+
+        SetAndroidSettings();
 
         //TODO Remove this when all i working again
         /*while (GameManager.SP.GetPlayerData == null)

@@ -109,4 +109,6 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
     public PlayerBehaviour GetPB => pb;
 
     public bool GameStarted => gameStarted;
+
+    public int GetMatchLives => amountOfLives;
 }

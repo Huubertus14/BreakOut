@@ -18,6 +18,15 @@ public class GameUIController : SingetonMonobehaviour<GameUIController>
     {
         base.Awake();
         playButOut.enabled = false;
+
+        //Fix Resolution in game
+    }
+
+    private void FixUIPlacements()
+    {
+        //Get res
+        //Screen.currentResolution.height;
+        
     }
 
     public void LeaveGame()

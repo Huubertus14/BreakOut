@@ -26,6 +26,7 @@ public abstract class BricksAbstract : MonoBehaviour
         transform.localScale = new Vector3(0.15f, 0.1f, 1);
     }
 
+
     public virtual void HitBrick()
     {
         health -= 1;
