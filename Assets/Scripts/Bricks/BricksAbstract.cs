@@ -8,14 +8,14 @@ public abstract class BricksAbstract : MonoBehaviour
     [Header("BrickValues")]
     [SerializeField] protected int health;
     [SerializeField] protected float moveSpeed = 5f;
-    [SerializeField] protected int brickScore  = 100;
+    [SerializeField] protected int brickScore = 100;
     [SerializeField] protected BrickColor brickColor;
 
     private SpriteRenderer spriteRenderer;
 
-    [SerializeField]private Vector2 brickIndexes;
+    [SerializeField] private Vector2 brickIndexes;
 
-    [SerializeField]protected Vector3 goalPosition;
+    [SerializeField] protected Vector3 goalPosition;
 
     private float delayTimer;
 
@@ -65,14 +65,14 @@ public abstract class BricksAbstract : MonoBehaviour
 
     public void SetPosToTop(float _top)
     {
-        transform.localPosition = new Vector3(transform.localPosition.x , transform.localPosition.y +_top, transform.localPosition.z);
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + _top, transform.localPosition.z);
     }
 
     public virtual void SetGoalPosition(int _x, int _y, bool randomDelay = false)
     {
         if (randomDelay)
         {
-            delayTimer = Random.Range(0.5f,1.2f);
+            delayTimer = Random.Range(0.5f, 1.2f);
         }
         else
         {
@@ -92,7 +92,7 @@ public abstract class BricksAbstract : MonoBehaviour
 
     public virtual void SetPosition(int _x, int _y)
     {
-        brickIndexes.x = _x; 
+        brickIndexes.x = _x;
         brickIndexes.y = _y;
         float xCalculated = GameConstants.XBEGIN, yCalculated = GameConstants.YBEGIN;
 
@@ -111,4 +111,6 @@ public abstract class BricksAbstract : MonoBehaviour
     public int GetScore => brickScore;
 
     public Vector2 GetIndex => brickIndexes;
+
+    public BrickColor GetColor => brickColor;
 }

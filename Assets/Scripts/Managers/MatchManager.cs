@@ -11,7 +11,7 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
 {
     [Header("Refs:")]
     [SerializeField] private PlayerBehaviour pb;
-
+    [SerializeField] private HealthBarBehaviour healthBar;
 
     [Header("Match Values")]
     [SerializeField] private float timePlayed;
@@ -62,12 +62,15 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
             yield return new WaitForSeconds(0.8f);
             //Enable shoot button
             BallManager.SP.FireFirstBall();
+            //Update hp bar
+           
         }
         else
         {
             //Game Over Screen
             GameUIController.SP.SetGameOverPanel(true);
         }
+        healthBar.UpdateLives();
         yield return 0;
     }
 

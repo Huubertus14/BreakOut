@@ -21,4 +21,30 @@ public class GameConstants
     {
         get { return new Color[] { Color.red, Color.green, Color.blue, Color.cyan, Color.magenta, Color.yellow }; }
     }
+
+    public static Color GetColorFromBrick(BrickColor color)
+    {
+        switch (color)
+        {
+            case BrickColor.Blue:
+                return Color.blue;
+            case BrickColor.Green:
+                return Color.green;
+            case BrickColor.Orange:
+                Debug.Log("Set right color");
+                return Color.white;
+            case BrickColor.Pink:
+                Debug.Log("Set right color");
+                return Color.white;
+            case BrickColor.Purple:
+                Debug.Log("Set right color");
+                return Color.white;
+            case BrickColor.Red:
+                return Color.red;
+            case BrickColor.None:
+                return Color.white;
+            default:
+                return Color.white;
+        }
+    }
 }

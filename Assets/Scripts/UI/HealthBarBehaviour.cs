@@ -7,10 +7,7 @@ using UnityEngine;
 /// </summary>
 public class HealthBarBehaviour : MonoBehaviour
 {
-
-
     [SerializeField] private GameObject hearthPrefab;
-
     private List<GameObject> hearts;
 
     private void Start()
@@ -28,18 +25,18 @@ public class HealthBarBehaviour : MonoBehaviour
             _temp.transform.SetSiblingIndex(i);
             hearts.Add(_temp);
         }
+        UpdateLives();
     }
 
-    public void AddLive(int lives = 1)
+    public void UpdateLives()
     {
-
-    }
-
-    public void RemoveLive(int lives = 1)
-    {
-        for (int i = 0; i < lives; i++)
+        for (int i = 0; i < GameConstants.MAXLIVES; i++) //disable all
         {
-            hearts.RemoveAt(hearts.Count - 1);
+            hearts[i].gameObject.SetActive(false);
+        }
+        for (int i = 0; i < MatchManager.SP.GetMatchLives + 1; i++)
+        {
+            hearts[i].gameObject.SetActive(true);
         }
     }
 }

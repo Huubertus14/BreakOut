@@ -14,7 +14,6 @@ public class PlayerBehaviour : MonoBehaviour
         hitWiggle = GetComponent<TweenAbstract>();
     }
 
-
     private void FixedUpdate()
     {
         if (Input.touchCount > 0)
