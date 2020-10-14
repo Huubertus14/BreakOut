@@ -50,7 +50,7 @@ public class BallBehaviour : MonoBehaviour
         if (ab != null)
         {
             ab.HitBrick();
-            TextFeedbackController.SP.GetText(ab);
+            FeedbackController.SP.GetText(ab);
             MatchManager.SP.AddScore(ab.GetScore);
             hitWiggle.StartTween(0.2f);
             return;

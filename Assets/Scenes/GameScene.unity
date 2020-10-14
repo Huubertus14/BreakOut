@@ -2841,7 +2841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa1e9ecfe8004d149872547f9727047e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hearthPrefab: {fileID: 2737058428622812175, guid: 34626b28f03f9254b90ede2b85639f8b,
+  hearthPrefab: {fileID: -4242559723231667504, guid: 34626b28f03f9254b90ede2b85639f8b,
     type: 3}
 --- !u!114 &1733189959
 MonoBehaviour:

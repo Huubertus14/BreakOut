@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TextFeedbackController : SingetonMonobehaviour<TextFeedbackController>
+public class FeedbackController : SingetonMonobehaviour<FeedbackController>
 {
     [Header("Prefabs:")]
     [SerializeField] private TextFeedbackBehaviour textFeedbackPrefab;

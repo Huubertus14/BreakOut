@@ -7,36 +7,53 @@ using UnityEngine;
 /// </summary>
 public class HealthBarBehaviour : MonoBehaviour
 {
-    [SerializeField] private GameObject hearthPrefab;
-    private List<GameObject> hearts;
+    [SerializeField] private HearthBehaviour hearthPrefab;
+    private HearthBehaviour[] hearts;
 
     private void Start()
     {
-        CreateHealthBar();
+        StartCoroutine(CreateHealthBar());
     }
 
-    public void CreateHealthBar()
+    public IEnumerator CreateHealthBar()
     {
-        hearts = new List<GameObject>();
+        hearts = new HearthBehaviour[GameConstants.MAXLIVES];
 
-        for (int i = 0; i < GameConstants.MAXLIVES; i++)
+        for (int i = 0; i < hearts.Length; i++)
         {
-            GameObject _temp = Instantiate(hearthPrefab, transform.position, Quaternion.identity, transform);
+            HearthBehaviour _temp = Instantiate(hearthPrefab, transform.position, Quaternion.identity, transform);
             _temp.transform.SetSiblingIndex(i);
-            hearts.Add(_temp);
+            hearts[i] = _temp;
+
+            yield return 0;
+
+            if (i > MatchManager.SP.GetMatchLives)
+            {
+                hearts[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                hearts[i].EnableHearth();
+            }
         }
-        UpdateLives();
     }
 
     public void UpdateLives()
     {
-        for (int i = 0; i < GameConstants.MAXLIVES; i++) //disable all
+        for (int i = 0; i < hearts.Length; i++)
         {
-            hearts[i].gameObject.SetActive(false);
-        }
-        for (int i = 0; i < MatchManager.SP.GetMatchLives + 1; i++)
-        {
-            hearts[i].gameObject.SetActive(true);
+            if (i > MatchManager.SP.GetMatchLives)
+            {
+                hearts[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                if (!hearts[i].gameObject.activeSelf)
+                {
+                    hearts[i].gameObject.SetActive(true);
+                    hearts[i].EnableHearth();
+                }
+            }
         }
     }
 }

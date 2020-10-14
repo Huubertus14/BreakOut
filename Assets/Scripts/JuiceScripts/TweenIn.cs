@@ -7,11 +7,11 @@ public class TweenIn : TweenAbstract
     [Header("AnimationValues")]
     [SerializeField] private AnimationCurve curve;
 
-    public float timeTweenKey = 2;
-    public float tweenValue = 2;
+    private float timeTweenKey = 2;
+    private float tweenValue = 2;
 
 
-    public Vector3 orginScale;
+    private Vector3 orginScale;
 
     RectTransform rectTransform;
 
