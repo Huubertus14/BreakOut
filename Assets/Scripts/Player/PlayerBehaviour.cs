@@ -38,4 +38,9 @@ public class PlayerBehaviour : MonoBehaviour
             hitWiggle.StartTween(0.2f);
         }
     }
+
+    public void PowerUp(IPowerUp powerUp)
+    {
+        powerUp.ApplyPowerUp();
+    }
 }

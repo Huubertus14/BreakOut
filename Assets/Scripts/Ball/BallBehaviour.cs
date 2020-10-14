@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class BallBehaviour : MonoBehaviour
@@ -41,6 +42,17 @@ public class BallBehaviour : MonoBehaviour
         if (rb.velocity.sqrMagnitude > maxVelocity)
         {
             rb.velocity = rb.velocity.normalized * maxVelocity;
+        }
+
+        if (rb.velocity.y < 0.5f && rb.velocity.y > -0.5f)
+        {
+            if (rb.velocity.y > 0)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0.5f);
+            }else if(rb.velocity.y < 0)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -0.5f);
+            }
         }
     }
 
