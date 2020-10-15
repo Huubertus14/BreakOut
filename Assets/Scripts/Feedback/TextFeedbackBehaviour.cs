@@ -35,7 +35,7 @@ public class TextFeedbackBehaviour : MonoBehaviour
             speed *= 1.05f;
             yield return 0;
         }
-
         yield return 0;
+        gameObject.SetActive(false);
     }
 }

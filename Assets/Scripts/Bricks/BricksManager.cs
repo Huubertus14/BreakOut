@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#pragma warning disable 0649
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Runtime.InteropServices;
@@ -18,8 +20,7 @@ public enum BrickColor
 public class BricksManager : SingetonMonobehaviour<BricksManager>
 {
     [Header("Refs:")]
-    [SerializeField]
-    private BricksAbstract brickPrefab;
+    [SerializeField] private BricksAbstract brickPrefab;
     [SerializeField] private Sprite[] brickSprites; //Are set in the inspector
 
 

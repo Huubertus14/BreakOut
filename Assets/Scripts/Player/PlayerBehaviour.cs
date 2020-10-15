@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿#pragma warning disable 0649
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
     [Header("Player Values")]
-    [SerializeField] private float wideSize = 1.5f;
+    [SerializeField] private float paddleSize = 1.5f;
 
     private TweenAbstract hitWiggle;
     private void Start()
@@ -39,8 +41,8 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    public void PowerUp(IPowerUp powerUp)
+    public void PowerUp(PowerUpAbstract pu)
     {
-        powerUp.ApplyPowerUp();
+        pu.ApplyPowerUp();
     }
 }

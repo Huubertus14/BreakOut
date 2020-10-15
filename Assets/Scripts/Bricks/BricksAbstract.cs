@@ -32,6 +32,8 @@ public abstract class BricksAbstract : MonoBehaviour
         health -= 1;
         if (health <= 0)
         {
+            PowerUpController.SP.SpawnRandomPowerUp(transform.position);
+            MatchManager.SP.AddBrickHit(brickColor);
             DestroyBrick();
         }
     }
@@ -106,6 +108,9 @@ public abstract class BricksAbstract : MonoBehaviour
     protected void DestroyBrick()
     {
         BricksManager.SP.RemoveBrick(this);
+
+        //Create a powerup if needed
+
     }
 
     public int GetScore => brickScore;

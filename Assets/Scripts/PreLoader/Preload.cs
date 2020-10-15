@@ -1,9 +1,10 @@
-﻿using System;
+﻿#pragma warning disable 0649
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 public class Preload : MonoBehaviour
 {
     [SerializeField] private GameObject persistancePrefab;
@@ -35,12 +36,12 @@ public class Preload : MonoBehaviour
         SetAndroidSettings();
 
         //TODO Remove this when all i working again
-        /*while (GameManager.SP.GetPlayerData == null)
+        while (GameManager.SP.GetPlayerData == null)
         {
             GameManager.SP.SetPlayerData(SaveData.LoadData());
             Debug.Log("Load Data");
             yield return 0;
-        }*/
+        }
 
         yield return 0;
         SceneManager.LoadScene(1);

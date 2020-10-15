@@ -39,6 +39,7 @@ public class GameManager : SingetonMonobehaviour<GameManager>
     public void SaveGame()
     {
         //TODO Save game here
+        SaveData.Save(playerData);
     }
 
     public PlayerData GetPlayerData => playerData;

@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#pragma warning disable 0649
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,16 +16,15 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
     [SerializeField] private HealthBarBehaviour healthBar;
 
     [Header("Match Values")]
-    [SerializeField] private float timePlayed;
-    [SerializeField] private int matchScore;
-    [SerializeField] private int amountOfLives;
+    [SerializeField] private MatchData matchData;
+
 
     private bool gameStarted = false;
 
     protected override void Awake()
     {
         base.Awake();
-        
+
     }
 
     private void Start()
@@ -33,16 +34,18 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
 
     private void Update()
     {
-        timePlayed += Time.deltaTime;
+        matchData.timePlayed += Time.deltaTime;
     }
 
-    public void ResetMatchValues() {
-        matchScore = 0;
-        timePlayed = 0;
+    public void ResetMatchValues()
+    {
+        matchData = new MatchData();
+
         gameStarted = false;
-        amountOfLives = 2;
         GameUIController.SP.SetGameOverPanel(false);
         GameUIController.SP.SetPlayButton(true);
+
+
     }
 
     public void ResetGame()
@@ -53,9 +56,9 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
     public IEnumerator PlayerDied()
     {
         //Player Died
-        amountOfLives--;
-        gameStarted = false;
-        if (amountOfLives >= 0)
+        matchData.amountOfLives--;
+
+        if (matchData.amountOfLives >= 0)
         {
             BallManager.SP.CreateFirstBall();
 
@@ -63,12 +66,13 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
             //Enable shoot button
             BallManager.SP.FireFirstBall();
             //Update hp bar
-           
+
         }
         else
         {
             //Game Over Screen
             GameUIController.SP.SetGameOverPanel(true);
+            gameStarted = false;
         }
         healthBar.UpdateLives();
         yield return 0;
@@ -84,10 +88,45 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
         gameStarted = true;
     }
 
+    public void AddLive(int live = 1)
+    {
+        matchData.amountOfLives++;
+        healthBar.UpdateLives();
+    }
+
     public void AddScore(int _score)
     {
-        matchScore += _score;
-        GameUIController.SP.SetScoreText(matchScore);
+        matchData.matchScore += _score;
+        GameUIController.SP.SetScoreText(matchData.matchScore);
+    }
+
+    public void AddBrickHit(BrickColor brick)
+    {
+        switch (brick)
+        {
+            case BrickColor.Blue:
+                matchData.blueBricksHit++;
+                break;
+            case BrickColor.Green:
+                matchData.greenBricksHit++;
+                break;
+            case BrickColor.Orange:
+                matchData.orangeBricksHit++;
+                break;
+            case BrickColor.Pink:
+                matchData.pinkBricksHit++;
+                break;
+            case BrickColor.Purple:
+                matchData.purpleBricksHit++;
+                break;
+            case BrickColor.Red:
+                matchData.redBricksHit++;
+                break;
+            case BrickColor.None:
+                break;
+            default:
+                break;
+        }
     }
 
     public void GoToMainMenu()
@@ -96,22 +135,24 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
 
         //Add score to player
         //Check if new highScore
-        GameManager.SP.GetPlayerData.playerTotalScore += matchScore;
+        GameManager.SP.GetPlayerData.playerTotalScore += matchData.matchScore;
 
-        if (matchScore > GameManager.SP.GetPlayerData.playerHighScore)
+        if (matchData.matchScore > GameManager.SP.GetPlayerData.playerHighScore)
         {
             //New HighScore
-            GameManager.SP.GetPlayerData.playerHighScore = matchScore;
+            GameManager.SP.GetPlayerData.playerHighScore = matchData.matchScore;
             //Do something awesome !
         }
         GameManager.SP.SaveGame();
     }
 
-    public int GetScore => matchScore;
+    public int GetScore => matchData.matchScore;
 
     public PlayerBehaviour GetPB => pb;
 
     public bool GameStarted => gameStarted;
 
-    public int GetMatchLives => amountOfLives;
+    public int GetMatchLives => matchData.amountOfLives;
+
+    public HealthBarBehaviour GetHealthbar => healthBar;
 }
