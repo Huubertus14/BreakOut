@@ -17,6 +17,10 @@ public class GameConstants
     public const int MAXLIVES = 6;
     public const int MAXBALLS = 50;
 
+    //Ball values
+    public const float BEGINFORCE = 150f;
+    public const float MAXBALLVELOCITY = 0;
+
     public static Color[] GetColors
     {
         get { return new Color[] { Color.red, Color.green, Color.blue, Color.cyan, Color.magenta, Color.yellow }; }
@@ -31,14 +35,11 @@ public class GameConstants
             case BrickColor.Green:
                 return Color.green;
             case BrickColor.Orange:
-                Debug.Log("Set right color");
-                return Color.white;
+                return new Color(1, 0.5f, 0, 1);
             case BrickColor.Pink:
-                Debug.Log("Set right color");
-                return Color.white;
+                return new Color(1, 0, 0.8f, 1);
             case BrickColor.Purple:
-                Debug.Log("Set right color");
-                return Color.white;
+                return new Color(1, 0, 1, 1);
             case BrickColor.Red:
                 return Color.red;
             case BrickColor.None:

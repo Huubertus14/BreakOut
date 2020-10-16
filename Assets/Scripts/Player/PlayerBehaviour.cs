@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 0649
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,12 +9,15 @@ public class PlayerBehaviour : MonoBehaviour
 {
     [Header("Player Values")]
     [SerializeField] private float paddleSize = 1.5f;
-
     private TweenAbstract hitWiggle;
+
+    private Queue<PowerUpAbstract> powerUpQueue;
+
     private void Start()
     {
         //Create ball prefab
         hitWiggle = GetComponent<TweenAbstract>();
+        powerUpQueue = new Queue<PowerUpAbstract>();
     }
 
     private void FixedUpdate()
@@ -38,11 +42,28 @@ public class PlayerBehaviour : MonoBehaviour
         if (bb != null)
         {
             hitWiggle.StartTween(0.2f);
+
+            if (bb.GetBallPower == BallPower.None) //Only do this to balls that are not special
+            {
+                if (powerUpQueue.Count > 0)
+                {
+                    powerUpQueue.Dequeue().ApplyPowerUp(bb);
+                }
+            }
+
         }
     }
 
     public void PowerUp(PowerUpAbstract pu)
     {
-        pu.ApplyPowerUp();
+        if (pu.queueAble)
+        {
+            powerUpQueue.Enqueue(pu);
+            pu.DisablePowerUp();
+        }
+        else
+        {
+            pu.ApplyPowerUp();
+        }
     }
 }

@@ -10,8 +10,10 @@ public abstract class PowerUpAbstract : MonoBehaviour
 {
     [Header("PowerUp Values:")]
     [SerializeField] private float fallSpeed;
+    public bool queueAble;
     [SerializeField] private Sprite powerUpSprite;
-    private SpriteRenderer ren;
+   
+    protected SpriteRenderer ren;
 
     private void Awake()
     {
@@ -56,10 +58,20 @@ public abstract class PowerUpAbstract : MonoBehaviour
         {
             //Apply powerup
             pb.PowerUp(this);
-            gameObject.SetActive(false);
             return;
         }
     }
 
+    public void DisablePowerUp()
+    {
+        ren.enabled = false;
+    }
+
     public abstract void ApplyPowerUp();
+    public virtual void ApplyPowerUp(BallBehaviour bb = null)
+    {
+
+    }
+
+
 }

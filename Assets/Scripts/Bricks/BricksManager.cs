@@ -49,7 +49,6 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         brickDictionairy.Add(BrickColor.Pink, brickSprites[3]);
         brickDictionairy.Add(BrickColor.Purple, brickSprites[4]);
         brickDictionairy.Add(BrickColor.Red, brickSprites[5]);
-
     }
 
     private IEnumerator Start()
@@ -57,11 +56,10 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         StartCoroutine(CreateBeginBricks(GameConstants.BRICK_AMOUNT));
         yield return new WaitUntil(() => bricksCreated == true);
         CreateBox(20);
-        //Debug.Log("empty: " + isEmpty(0,0)+ " " + isEmpty(500,500));
-        //yield return new WaitForSeconds(3f);
-        /* MoveAllBricksOneDown();
-         yield return new WaitForSeconds(1.5f);*/
-        //AddRowOnTop();
+        for (int i = 0; i < activeBricks.Count; i++)
+        {
+            activeBricks[i].GetNeighbours();
+        }
     }
 
     public IEnumerator CreateBeginBricks(int _amount)
@@ -92,8 +90,9 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
             unusedBricks.Enqueue(singleBrickArray[i]);
             singleBrickArray[i].gameObject.SetActive(false);
         }
-        bricksCreated = true;
         yield return 0;
+
+        bricksCreated = true;
     }
 
     public void RemoveBrick(BricksAbstract _brick)
@@ -127,33 +126,30 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
         //Check if x & Y are in range
         try
         {
-            bool empty = true;
+            bool empty = false;
             if (brickArray[(int)_index.x, (int)_index.y] == null || !brickArray[(int)_index.x, (int)_index.y].gameObject.activeSelf)
             {
-                empty = false;
+                empty = true;
             }
             return empty;
         }
         catch (System.Exception e)
         {
-            Debug.LogError(e.Message);
-            throw;
+            //Debug.LogError(e.Message);
+            return false;
+            //throw;
         }
-
     }
 
     public BricksAbstract GetBrickAt(Vector2 _index)
     {
         BricksAbstract tempBrick = null;
-        if (isEmpty(_index))
-        {
-            //No brick found
-            Debug.Log("This place is empty");
-            return tempBrick;
-        }
-        else
+        try
         {
             tempBrick = brickArray[(int)_index.x, (int)_index.y];
+        }
+        catch (System.Exception)
+        {
         }
 
         return tempBrick;
@@ -192,6 +188,14 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
                 _movePlace.y++;
                 MoveBrick(activeBricks[i], _movePlace, 3, false, true);
             }
+        }
+    }
+
+    public void AddToDestroy(BricksAbstract[] bricks)
+    {
+        foreach (var item in bricks)
+        {
+            RemoveBrick(item);
         }
     }
 

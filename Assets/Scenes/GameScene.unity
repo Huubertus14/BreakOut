@@ -1861,10 +1861,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7c7395f2708fb64c893067ce1ab9913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballPrefab: {fileID: 5825344235078761641, guid: de95fef6b2cda8d4ab6229f84e148235,
+  ballPrefab: {fileID: 5825344235078761644, guid: de95fef6b2cda8d4ab6229f84e148235,
     type: 3}
   ballParent: {fileID: 1277415472}
-  allBalls: []
+  ballsInGame: []
 --- !u!1 &948714484
 GameObject:
   m_ObjectHideFlags: 0
@@ -2940,7 +2940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpPrefabs:
-  - {fileID: 7644124774004256242, guid: a20707edc76827a4d94800ab75371936, type: 3}
+  - {fileID: -4943842499301836345, guid: 25f9768ae8e614241a583517029bbc38, type: 3}
 --- !u!1 &1771676635
 GameObject:
   m_ObjectHideFlags: 0

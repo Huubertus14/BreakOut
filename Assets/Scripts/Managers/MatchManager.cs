@@ -60,11 +60,11 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
 
         if (matchData.amountOfLives >= 0)
         {
-            BallManager.SP.CreateFirstBall();
+            BallBehaviour firstBall = BallManager.SP.CreateFirstBall();
 
             yield return new WaitForSeconds(0.8f);
             //Enable shoot button
-            BallManager.SP.FireFirstBall();
+            BallManager.SP.FireFirstBall(firstBall);
             //Update hp bar
 
         }
@@ -84,7 +84,9 @@ public class MatchManager : SingetonMonobehaviour<MatchManager>
     public void PlayGame()
     {
         //TODO delay here, first create the grid of some sort
-        BallManager.SP.FireFirstBall();
+        BallBehaviour first = BallManager.SP.CreateFirstBall();
+
+        BallManager.SP.FireFirstBall(first);
         gameStarted = true;
     }
 

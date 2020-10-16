@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExtraLifePowerUp : PowerUpAbstract
+public class BallSplitPowerUp : PowerUpAbstract
 {
-    
     public override void ApplyPowerUp()
     {
-        MatchManager.SP.AddLive();
+        foreach (var item in BallManager.SP.GetAllBalls)
+        {
+            item.SplitBall();
+        }
+
+        
         gameObject.SetActive(false);
     }
 

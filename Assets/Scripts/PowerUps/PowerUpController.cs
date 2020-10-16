@@ -17,7 +17,7 @@ public class PowerUpController : SingetonMonobehaviour<PowerUpController>
 
     public PowerUpAbstract SpawnRandomPowerUp(Vector3 brickPos)
     {
-        int r = Random.Range(0, powerUpPrefabs.Length - 1);
+        int r = Random.Range(0, powerUpPrefabs.Length);
         PowerUpAbstract pu = Instantiate(powerUpPrefabs[r], transform.position, Quaternion.identity, transform);
         pu.SpawnPowerUp(brickPos);
 
