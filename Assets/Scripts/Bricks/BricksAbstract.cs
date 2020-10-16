@@ -86,22 +86,12 @@ public abstract class BricksAbstract : MonoBehaviour
 
     public void Explode(int explosionSize = 1) //1 is the basic size
     {
-        
         GetNeighbours();
         Debug.Log("Explode " + explosionSize);
-        explosionSize--;
-        //Find top
-        for (int i = 0; i < neighbours.Length; i++)
-        {
-            if (neighbours != null)
-            {
-                toDestroy.Add(neighbours[i]);
-                /*if (explosionSize > 0)
-                {
-                    neighbours[i].Explode(explosionSize);
-                }*/
-            }
-        }
+        
+        //Todo other variant of a ewxplosion
+        //Do a collision based in stead of this bitmapped
+
     }
 
     public virtual void SetSprite(Sprite _sprite, BrickColor _color)
@@ -137,6 +127,7 @@ public abstract class BricksAbstract : MonoBehaviour
 
         brickIndexes.x = _x;
         brickIndexes.y = _y;
+        GetNeighbours();
         //Set goal pos
         float xCalculated = GameConstants.XBEGIN, yCalculated = GameConstants.YBEGIN;
 
@@ -144,7 +135,7 @@ public abstract class BricksAbstract : MonoBehaviour
         yCalculated = yCalculated - (_y * GameConstants.YSTEP);
 
         goalPosition = new Vector3(xCalculated, yCalculated, transform.localPosition.z);
-        GetNeighbours();
+        
     }
 
     public virtual void SetPosition(int _x, int _y)

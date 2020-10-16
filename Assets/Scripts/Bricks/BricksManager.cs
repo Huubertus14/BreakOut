@@ -97,10 +97,13 @@ public class BricksManager : SingetonMonobehaviour<BricksManager>
 
     public void RemoveBrick(BricksAbstract _brick)
     {
-        unusedBricks.Enqueue(_brick);
-        brickArray[(int)_brick.GetIndex.x, (int)_brick.GetIndex.y] = null;
-        activeBricks.Remove(_brick);
-        _brick.gameObject.SetActive(false);
+        if (_brick != null)
+        {
+            unusedBricks.Enqueue(_brick);
+            brickArray[(int)_brick.GetIndex.x, (int)_brick.GetIndex.y] = null;
+            activeBricks.Remove(_brick);
+            _brick.gameObject.SetActive(false);
+        }
     }
 
     public void CreateBox(int _yLength)
